@@ -1,17 +1,17 @@
 import React from 'react';
 import { useRef, useState } from 'react';
 
-const Todo = ({ todo, updateTodo, deleteTodo }) => {
-  const [baseValue, setBaseValue] = useState(todo.title)
-  const [value, setValue] = useState(baseValue);
+const Todo = ({ todo, handleUpdateTodo, handleDeleteTodo }) => {
+  const [title, setTitle] = useState(todo.title)
+  const [value, setValue] = useState(title);
   const [isEditing, setIsEditing] = useState(false);
   const inputElement = useRef();
 
   const handleSubmit = e => {
     e.preventDefault();
     const updated = {...todo, title: value}
-    updateTodo(updated);
-    setBaseValue(value);
+    handleUpdateTodo(updated);
+    setTitle(value);
     setIsEditing(false);
   }
 
@@ -19,19 +19,19 @@ const Todo = ({ todo, updateTodo, deleteTodo }) => {
     if (e.key === 'Escape') {
       e.preventDefault();
       inputElement.current.blur();
-      setValue(baseValue);
+      setValue(title);
       setIsEditing(false);
     }
   }
 
   const handleDelete = e => {
     e.preventDefault();
-    deleteTodo(todo);
+    handleDeleteTodo(todo);
   }
 
   const toggleCompleted = e => {
     const updated = {...todo, completed: !todo.completed}
-    updateTodo(updated);
+    handleUpdateTodo(updated);
   }
 
   return (
@@ -43,7 +43,7 @@ const Todo = ({ todo, updateTodo, deleteTodo }) => {
         <input 
           className="toggle" 
           type="checkbox"
-          value={todo.completed}
+          checked={todo.completed}
           onChange={toggleCompleted}
         />
         <label onDoubleClick={() => setIsEditing(true)}>{value}</label>
