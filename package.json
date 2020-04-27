@@ -24,8 +24,13 @@
     "acceptance": "CYPRESS_BASE_URL=http://localhost:5000 start-server-and-test api http://localhost:3030 serve http://localhost:5000 cypress:acceptance",
     "cypress": "start-server-and-test start http://localhost:3000 cypress:open",
     "cypress:open": "cypress open",
-    "cypress:integration": "cypress run --spec 'cypress/tests/integration/**'",
-    "cypress:acceptance": "cypress run --spec 'cypress/tests/acceptance/**'"
+    "cypress:integration": "cypress run --spec 'cypress/tests/integration/**' --reporter mochawesome",
+    "cypress:acceptance": "cypress run --spec 'cypress/tests/acceptance/**' --reporter mochawesome",
+    "reports": "npm run reports:create && npm run reports:merge && npm run reports:marge",
+    "reports:create": "mkdir -p reports",
+    "reports:merge": "npx mochawesome-merge 'cypress/results/*.json' > reports/results.json",
+    "reports:marge": "npx marge reports/results.json -o reports -i"
+    
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -45,6 +50,10 @@
   "devDependencies": {
     "cypress": "^4.4.1",
     "json-server": "^0.16.1",
+    "mocha": "^7.1.2",
+    "mochawesome": "^6.1.0",
+    "mochawesome-merge": "^4.0.3",
+    "mochawesome-report-generator": "^5.1.0",
     "serve": "^11.3.0",
     "start-server-and-test": "^1.11.0"
   }

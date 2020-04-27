@@ -1,7 +1,7 @@
 version: '2.4'
 
 volumes:
-  public:
+  reports:
     driver: local
 
 services:
@@ -29,6 +29,8 @@ services:
     depends_on:
       dev:
         condition: service_healthy
+    volumes:
+      - reports:/app/cypress/results
     environment:
       CYPRESS_BASE_URL: http://dev:3000
     scale: ${INTEGRATION_RUNNERS:-1}
@@ -67,5 +69,13 @@ services:
     depends_on:
       app:
         condition: service_healthy
+    volumes:
+      - reports:/app/cypress/results
     command: npm run cypress:acceptance -- --browser chrome ${ACCEPTANCE_OPTIONS}
+  reports:
+    extends:
+      service: base
+    volumes:
+      - reports:/app/cypress/results
+    command: npm run reports
       

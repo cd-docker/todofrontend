@@ -1,5 +1,12 @@
 {
   "baseUrl": "http://localhost:3000",
   "integrationFolder": "cypress/tests",
-  "projectId": "v13vnd"
+  "projectId": "v13vnd",
+  "reporter": "mochawesome",
+  "reporterOptions": {
+    "reportDir": "cypress/results",
+    "overwrite": false,
+    "html": false,
+    "json": true
+  }
 }
