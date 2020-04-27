@@ -1,6 +1,6 @@
 -include .env
 
-.PHONY: build integration acceptance results clean
+.PHONY: build integration acceptance results login logout publish clean
 
 DOCKER_BUILDKIT ?= 1
 COMPOSE_DOCKER_CLI_BUILD ?= 1
@@ -38,6 +38,21 @@ results:
 		then ${ERROR} "Test failure"
 	fi
 	${INFO} "Results stage complete"
+
+login:
+	${INFO} "Logging into Docker Hub..."
+	cat $$DOCKER_PASSWORD | docker login --username $$DOCKER_USER --password-stdin
+	${INFO} "Login stage complete"
+
+publish:
+	${INFO} "Publishing images..."
+	docker-compose push
+	${INFO} "Publish stage complete"
+
+logout:
+	${INFO} "Logging out..."
+	docker logout
+	${INFO} "Logout stage complete"
 
 clean:
 	${INFO} "Cleaning environment..."

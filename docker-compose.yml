@@ -6,6 +6,7 @@ volumes:
 
 services:
   base:
+    image: continuousdeliverydocker/todofrontend:latest
     build:
       context: .
       dockerfile: Dockerfile
