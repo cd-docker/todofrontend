@@ -1,6 +1,21 @@
 # Todo App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and is a React implementation of the [Todo MVC application](http://todomvc.com/).
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app) and is a React implementation of the [Todo MVC application](http://todomvc.com/) with Cypress integration and acceptance tests.
+
+## Environment Settings
+
+The continuous delivery workflow for this project requires environment settings which can be defined in a local `.env` file:
+
+```
+DOCKER_BUILDKIT=1
+COMPOSE_DOCKER_CLI_BUILD=1
+CYPRESS_RECORD_KEY=xxxxxx-xxxxx-xxxxxx-xxxxxx
+BUILD_NUMBER=7
+JENKINS_URL=test
+INTEGRATION_OPTIONS=--record --group integration --parallel
+INTEGRATION_RUNNERS=4
+ACCEPTANCE_OPTIONS=--record --group acceptance
+```
 
 ## Available Scripts
 

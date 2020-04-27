@@ -1,0 +1,10 @@
+.git
+.gitignore
+.env
+.dockerignore
+.DS_Store
+Dockerfile
+build
+node_modules
+cypress/videos
+cypress/screenshots

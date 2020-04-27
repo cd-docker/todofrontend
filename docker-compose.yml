@@ -1,0 +1,71 @@
+version: '2.4'
+
+volumes:
+  public:
+    driver: local
+
+services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      CI: 'true'
+      CYPRESS_RECORD_KEY:
+      CYPRESS_GROUP:
+      JENKINS_URL:
+      BUILD_NUMBER:
+  dev:
+    extends:
+      service: base
+    healthcheck:
+      test: curl -fs http://localhost:3000
+      interval: 3s
+      retries: 10
+    command: npm run start
+  integration:
+    extends:
+      service: base
+    depends_on:
+      dev:
+        condition: service_healthy
+    environment:
+      CYPRESS_BASE_URL: http://dev:3000
+    scale: ${INTEGRATION_RUNNERS:-1}
+    command: npm run cypress:integration -- --browser chrome ${INTEGRATION_OPTIONS}
+  api:
+    extends:
+      service: base
+    healthcheck:
+      test: curl -fs http://localhost:3030
+      interval: 3s
+      retries: 10
+    command: npm run api -- --host=0.0.0.0
+  app:
+    extends:
+      service: base
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: curl -fs http://localhost:5000
+      interval: 3s
+      retries: 10
+    environment:
+      CYPRESS_API_URL: http://api:3030/todos
+      REACT_APP_API_URL: http://api:3030/todos
+    command:
+      - npm
+      - run
+      - serve
+  acceptance:
+    extends:
+      service: base
+    environment:
+      CYPRESS_BASE_URL: http://app:5000
+      CYPRESS_API_URL: http://api:3030/todos
+    depends_on:
+      app:
+        condition: service_healthy
+    command: npm run cypress:acceptance -- --browser chrome ${ACCEPTANCE_OPTIONS}
+      
